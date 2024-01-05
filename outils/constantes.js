@@ -1,5 +1,5 @@
 export const COLORS ={
-    main : '#F05D5E',
+    mainCol : '#F05D5E',
     grey : '#323030',
     white : '#FFFFFF',
     pink : '#EF62E5',

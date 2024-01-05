@@ -1,42 +1,40 @@
 import React, { useState, useEffect } from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
 import { View, Text, TextInput, FlatList } from 'react-native';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import homeStyles from './style';
 import { FakeActivity } from '../../fakeData/fakeActivity';
+import ActivityItem from '../../composantes/ActivityItem';
+
+// Assurez-vous que la clé API est correctement importée
+import { API_KEY, WEATHER_BASE_URL, ONECALL_BASE_URL, TIMEMACHINE_BASE_URL, LANG, UNITS } from '../../outils/apiConfig';
+
+
+
 
 const Home = () => {
   const [city, setCity] = useState('');
   const [weatherInfo, setWeatherInfo] = useState(null);
-  const [tempHier, setTempHier] = useState(null);
-  const [tempDemain, setTempDemain] = useState(null);
-  const apiKey = 'a2fac297d18d16751c1e2c8f207eaa6c';
+  const [isLoading, setIsLoading] = useState(false);
+
 
   useEffect(() => {
     const fetchWeatherInfo = async () => {
       try {
         if (city) {
-          const todayUrl = `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&lang=fr&units=metric`;
+          // Requête pour obtenir les informations météorologiques d'aujourd'hui
+          const todayUrl = `${WEATHER_BASE_URL}?q=${city}&appid=${API_KEY}&lang=${LANG}&units=${UNITS}`;
           const todayResponse = await fetch(todayUrl);
           const todayData = await todayResponse.json();
+          console.log('Réponse aujourd\'hui :', todayData);
+
           setWeatherInfo(todayData);
-
-          if (todayData.coord) {
-            const yesterdayDate = new Date();
-            yesterdayDate.setDate(yesterdayDate.getDate() - 1);
-
-            const yesterdayUrl = `http://api.openweathermap.org/data/2.5/onecall/timemachine?lat=${todayData.coord.lat}&lon=${todayData.coord.lon}&dt=${Math.floor(yesterdayDate.getTime() / 1000)}&appid=${apiKey}&lang=fr&units=metric`;
-            const yesterdayResponse = await fetch(yesterdayUrl);
-            const yesterdayData = await yesterdayResponse.json();
-            setTempHier(yesterdayData.current ? yesterdayData.current.temp : null);
-
-            const tomorrowUrl = `http://api.openweathermap.org/data/2.5/onecall?lat=${todayData.coord.lat}&lon=${todayData.coord.lon}&exclude=current,minutely,hourly,alerts&appid=${apiKey}&lang=fr&units=metric`;
-            const tomorrowResponse = await fetch(tomorrowUrl);
-            const tomorrowData = await tomorrowResponse.json();
-            setTempDemain(tomorrowData.daily && tomorrowData.daily[1] ? tomorrowData.daily[1].temp.day : null);
-          }
+          setIsLoading(true); // Début du chargement
         }
+        setIsLoading(false); // Fin du chargement
       } catch (error) {
         console.error('Erreur lors de la récupération des données météo', error);
+        setIsLoading(false); // Fin du chargement en cas d'erreur
       }
     };
 
@@ -61,73 +59,132 @@ const Home = () => {
           value={city}
           onChangeText={setCity}
         />
-        <Text style={homeStyles.headTemp}>{weatherInfo ? weatherInfo.name : ''}</Text>
+        <Text style={homeStyles.headCity}>{weatherInfo ? weatherInfo.name : ''}</Text>
         <Text style={homeStyles.fullDate}>{formatDate(new Date())}</Text>
       </View>
-      {weatherInfo ? (
-        <View>
-          <View style={homeStyles.tempContainer}>
-          <LinearGradient colors={['#EF62E5', '#2B63F3']} style={homeStyles.tempText}>
-            <View style={homeStyles.tempTextContainer}>
-              <Text style={homeStyles.tempText}>Hier: {tempHier !== null ? `${tempHier} °C` : '-- °C'}</Text>
-            </View>
-          </LinearGradient>
-            {weatherInfo.main && (
+  
+      {isLoading ? (
+        <Text style={homeStyles.loading}>Chargement...</Text>
+      ) : (
+        weatherInfo ? (
+          <View>
+            <View style={homeStyles.tempContainer}>
               <LinearGradient colors={['#EF62E5', '#2B63F3']} style={homeStyles.tempText}>
                 <View style={homeStyles.tempTextContainer}>
-                  <Text style={homeStyles.tempText}>Auj: {weatherInfo.main.temp} °C</Text>
+                  <Text style={homeStyles.tempText}>Hier:  -- °C </Text>
                 </View>
               </LinearGradient>
-            )}
-            <LinearGradient colors={['#EF62E5', '#2B63F3']} style={homeStyles.tempText}>
-              <View style={homeStyles.tempTextContainer}>
-                <Text style={homeStyles.tempText}>Dem: {tempDemain !== null ? `${tempDemain} °C` : '-- °C'}</Text>
+              {weatherInfo.main && (
+                <LinearGradient colors={['#EF62E5', '#2B63F3']} style={homeStyles.tempText}>
+                  <View style={homeStyles.tempTextContainer}>
+                  <Text style={homeStyles.tempText}>Auj: {Math.round(weatherInfo.main.temp)} °C</Text>
+                  </View>
+                </LinearGradient>
+              )}
+              <LinearGradient colors={['#EF62E5', '#2B63F3']} style={homeStyles.tempText}>
+                <View style={homeStyles.tempTextContainer}>
+                  <Text style={homeStyles.tempText}>Dem: -- °C</Text>
+                </View>
+              </LinearGradient>
+            </View>
+            
+            <View style={homeStyles.tempNumContainer}>
+            <MaterialCommunityIcons name="weather-fog" style={{color: 'white'}} size={90} />
+              {weatherInfo.main && <Text style={homeStyles.headTemp}>{Math.round(weatherInfo.main.temp)} °C</Text>}
+            </View>
+  
+            <FlatList
+              data={FakeActivity}
+              keyExtractor={(item) => item.id.toString()}
+              horizontal={true}
+              showsHorizontalScrollIndicator={false}
+              renderItem={({ item }) => (
+                <ActivityItem item={item} />
+              )}
+            />
+  
+  {weatherInfo.main && (
+  <View style={homeStyles.infoContainer}>
+    <View style={{
+      ...homeStyles.infoItem,
+      backgroundColor: 'rgba(255, 217, 55, 0.38)', // Couleur pour le vent
+    }}>
+      <Text style={{
+        ...homeStyles.textWind,
+        color: '#FFD937',
+        }}>{weatherInfo.wind.speed} m/s</Text>
+      <MaterialCommunityIcons name="weather-windy" style={{
+        ...homeStyles.icon,
+        color: '#FFD937'}} size={22} />
+    </View>
+    <View style={{
+      ...homeStyles.infoItem,
+      backgroundColor: 'rgba(68, 194, 209, 0.38)', // Couleur pour la visibilité
+    }}>
+      <Text style={{
+        ...homeStyles.text,
+        color: '#44C2D1',
+      }}>{weatherInfo.visibility / 1000} km</Text>
+      <MaterialCommunityIcons name="eye-outline" style={{
+        ...homeStyles.icon,
+        color: '#44C2D1'}} size={22} />
+    </View>
+    <View style={{
+      ...homeStyles.infoItem,
+      backgroundColor: 'rgba(255, 54, 54, 0.38)', // Couleur pour la pression
+    }}>
+      <Text style={{
+        ...homeStyles.text,
+        color: '#FF3636',
+      }}>{weatherInfo.main.pressure} hPa</Text>
+      <MaterialCommunityIcons name="progress-alert" style={{
+        ...homeStyles.icon,
+        color: '#FF3636'}} size={22} />
+    </View>
+    <View style={{
+      ...homeStyles.infoItem,
+      backgroundColor: 'rgba(70, 139, 255, 0.38)', // Couleur pour l'humidité
+    }}>
+      <Text style={{
+        ...homeStyles.text,
+        color: '#468BFF',
+      }}>{weatherInfo.main.humidity}%</Text>
+      <MaterialCommunityIcons name="water-outline" style={{
+        ...homeStyles.icon,
+        color: '#468BFF'}} size={22} />
+    </View>
+    {/* Nouvelle information météo */}
+    <View style={{
+      ...homeStyles.infoItem,
+      backgroundColor: 'rgba(255, 126, 54, 0.38)', // Couleur pour la nouvelle info
+    }}>
+      <Text style={{
+        ...homeStyles.text,
+        color: '#FF7E36',
+      }}>{weatherInfo.main.feels_like} °C</Text>
+      <MaterialCommunityIcons name="weather-windy-variant" style={{
+        ...homeStyles.icon,
+        color: '#FF7E36'}} size={22} />
+    </View>
+
+  </View>
+)}
+
+
+            {weatherInfo.sys && (
+              <View style={homeStyles.sun}>
+                <Text style={homeStyles.text}>{`Lever : ${new Date(weatherInfo.sys.sunrise * 1000).toLocaleTimeString('fr-FR', {hour: '2-digit', minute: '2-digit', hour12: false})}`}</Text>
+                {/* Utilisez le composant MaterialCommunityIcons de manière appropriée */}
+               <MaterialCommunityIcons name="weather-sunny" style={homeStyles.icon} size={26} />
+                <Text style={homeStyles.text}>{`Coucher : ${new Date(weatherInfo.sys.sunset * 1000).toLocaleTimeString('fr-FR', {hour: '2-digit', minute: '2-digit', hour12: false})}`}</Text>
               </View>
-            </LinearGradient>
+              )}
           </View>
-          
-          {/* temperature du jour */}
-          <View style={homeStyles.tempNumContainer}>
-            {weatherInfo.main && <Text style={homeStyles.largeWhiteText}>{weatherInfo.main.temp} °C</Text>}
-          </View>
-
-          {/* prevision sur 4 jours */}
-          <FlatList
-            data={FakeActivity}
-            keyExtractor={(item) => item.id.toString()}
-            horizontal={true}
-            showsHorizontalScrollIndicator={false}
-            renderItem={({ item }) => (
-            <LinearGradient colors={['#EF62E5', '#2B63F3']} style={homeStyles.dayContainer}>
-              <Text style={homeStyles.text}>{item.title}</Text>
-              <Text style={homeStyles.text}>{item.time}</Text>
-              <Text style={homeStyles.text}>{item.location}</Text>
-            </LinearGradient>
-            )}
-          />
-
-          {/* infos meteorologiques */}
-          {weatherInfo.main && (
-            <View style={homeStyles.infoContainer}>
-              <Text style={homeStyles.text}>{`Vent: ${weatherInfo.wind.speed} m/s`}</Text>
-              <Text style={homeStyles.text}>{`Visibilité: ${weatherInfo.visibility / 1000} km`}</Text>
-              <Text style={homeStyles.text}>{`Pression: ${weatherInfo.main.pressure} hPa`}</Text>
-              <Text style={homeStyles.text}>{`Humidité: ${weatherInfo.main.humidity}%`}</Text>
-            </View>
-          )}
-          {weatherInfo.sys && (
-            <View>
-              <Text style={homeStyles.text}>{`Lever du soleil: ${new Date(weatherInfo.sys.sunrise * 1000).toLocaleTimeString('fr-FR', {hour: '2-digit', minute: '2-digit', hour12: false})}`}</Text>
-              <Text style={homeStyles.text}>{`Coucher du soleil: ${new Date(weatherInfo.sys.sunset * 1000).toLocaleTimeString('fr-FR', {hour: '2-digit', minute: '2-digit', hour12: false})}`}</Text>
-            </View>
-          )}
-          
-        </View>
-      ) : (
-        <Text style={homeStyles.loading}>Chargement...</Text>
+        ) : null
       )}
     </View>
-  );
-};
+  )};
+  
+
 
 export default Home;

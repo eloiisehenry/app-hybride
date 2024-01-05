@@ -18,13 +18,15 @@ const BottomTabs = ({ city }) => {
     const Tab = createMaterialBottomTabNavigator();
 
     return (
-        <Tab.Navigator
-          initialRouteName="Home"
-          screenOptions={{
-            tabBarActiveColor:"#e91e63",
-            headerShown: false,
-            }}
-        >
+          <Tab.Navigator
+            initialRouteName="Home"
+            barStyle={{ backgroundColor: '#282828' }}
+            activeColor="#fff"
+            inactiveColor="#aaa" // Set the color for inactive icons
+            shifting={false}
+            labeled={true}
+            sceneAnimationEnabled={false}
+          >
           <Tab.Screen
             name="home"
             component={Home}
@@ -44,17 +46,17 @@ const BottomTabs = ({ city }) => {
                 <MaterialCommunityIcons name="magnify" color={color} size={26} />
               ),
             }}
-          />
-          <Tab.Screen
-            name="Profil"
-            component={Profil}
-            options={{
-              tabBarLabel: 'Profil',
-              tabBarIcon: ({ color }) => (
-                <MaterialCommunityIcons name="account" color={color} size={26} />
-              ),
-            }}
-          />
+          /><Tab.Screen
+          name="Profil"
+          component={Profil}
+          options={{
+            tabBarLabel: 'Profil',
+            tabBarIcon: ({ color }) => (
+              <MaterialCommunityIcons name="account" color={color} size={26} />
+            ),
+            tabBarColor: '#3E3E3E', // Ici, on définit la couleur de l'onglet actif
+          }}
+        />
           <Tab.Screen
             name="Map"
             component={Map}

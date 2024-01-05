@@ -2,25 +2,25 @@ export const FakeActivity =[
     {
         id: 1,
         title: 'Demain',
-        time: '10:00',
-        location: 'Paris'
+        weather: 'Vent fort',
+        temperature: 10,
     },
     {
         id: 2,
         title: 'Apres-Demain',
-        time: '10:00',
-        location: 'Paris'
+        weather: 'Brouillard',
+        temperature: 8,
     },
     {
         id: 3,
         title: 'Dans 3 jours',
-        time: '10:00',
-        location: 'Paris'
+        weather: 'Pluie',
+        temperature: 8,
     },
     {
         id: 4,
         title: 'Dans 4 jours',
-        time: '10:00',
-        location: 'Paris'
+        weather: 'Vent fort',
+        temperature: 10,
     },
     ]

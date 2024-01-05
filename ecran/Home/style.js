@@ -19,7 +19,7 @@ const homeStyles = StyleSheet.create({
       fontSize: 16,
     },
     input: {
-      width: '80%',
+      width: '100%',
       height: 50,
       padding: 10,
       marginBottom: 5,
@@ -35,27 +35,30 @@ const homeStyles = StyleSheet.create({
       color: 'white',
       fontSize: 16,
       marginBottom: 5,
+
+      fontWeight : '500',
     },
-    headTemp: {
+    headCity: {
       color: 'white',
       fontSize: 30,
       alignSelf: 'center',
-      marginTop: 5,
-      marginBottom: 5,
+      fontWeight: 'bold',
+      marginTop: 10,
+    },
+    headTemp: {
+      color: 'white',
+      fontSize: 50,
+      alignSelf: 'center',
+      fontWeight: 'bold',
     },
     tempNumContainer: {
       flexDirection: 'row',
-      justifyContent: 'flex-end',
+      justifyContent: 'space-around',
       width: '100%',
       marginTop: 30,
-      marginBottom: 30,
-      fontSize: 50,
+      marginBottom: 10,
+      fontSize: 70,
       color: 'white',
-    },
-    largeWhiteText: {
-      fontSize: 50,
-      color: 'white',
-      fontWeight: 'bold',
     },
     // temperature du jour, hier, demain
     tempContainer: {
@@ -78,20 +81,42 @@ const homeStyles = StyleSheet.create({
       borderRadius: 20,
     },
     infoContainer: {
-      marginBottom: 10,
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      margin: 10,
+      width: '100%',
+      alignSelf: 'center', // Centrer horizontalement
     },
-
-    // prevision sur 4 jours
-    dayContainer: {
-      backgroundColor: 'transparent',
-      width: 130,
-      height: 130,
+    infoItem: {
+      flex: 2,
+      padding: 10,
+      borderRadius: 15,
+      alignContent: 'center',
+      color: 'white',
+      alignItems: 'center', // Centrer verticalement
+      margin: 3, // Ajouter un espace de 5 unités entre chaque infoItem
+    },
+    sun :{
+      flexDirection: 'row',
+      justifyContent: 'space-around',
+      width: '100%',
+      marginBottom: 10,
+      borderRadius: 20,
+      marginTop: 28,
+      backgroundColor: '#282828',
       padding: 10,
       marginVertical: 8,
-      marginHorizontal: 8,
-      marginBottom: 30,
-      borderRadius: 20,
     },
+    icon: {
+      color: 'white',
+      alignSelf: 'center',
+      fontSize: 28,
+    },
+    textWind: {
+      color: 'FFD937',
+    },
+
+
   });
 
   export default homeStyles;
