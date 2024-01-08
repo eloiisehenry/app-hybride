@@ -89,7 +89,7 @@ const ProfilePage = () => {
         )}
         ListFooterComponentStyle={{ alignItems: 'center', justifyContent: 'center' }}
         ListFooterComponent={
-          <TouchableOpacity onPress={() => navigation.navigate('avCity')}>
+          <TouchableOpacity onPress={() => navigation.navigate('FavCity')}>
             <Text style={profilStyles.voirPlus}>Voir plus . . .</Text>
           </TouchableOpacity>
         }

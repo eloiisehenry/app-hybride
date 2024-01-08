@@ -9,6 +9,7 @@ import Login from "../ecran/Auth/Login";
 import Register from "../ecran/Auth/Register";
 import ModifProfil from "../ecran/Profil/modifProfil";
 import FavCity from "../ecran/Profil/FavCity";
+import ProfilePage from "../ecran/Profil";
 
 
 
@@ -27,6 +28,7 @@ const Routes = () => {
         <Stack.Screen name="Register" component={Register} />
         <Stack.Screen name="ModifProfil" component={ModifProfil} />
         <Stack.Screen name="FavCity" component={FavCity} />
+        <Stack.Screen name="ProfilePage" component={ProfilePage} />
       </Stack.Navigator>
     </NavigationContainer>
   );
