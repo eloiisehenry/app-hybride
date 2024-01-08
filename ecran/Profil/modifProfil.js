@@ -6,11 +6,11 @@ import { auth } from '../../services/fireBase'; // Assurez-vous que ce chemin es
 import profilStyles from './style';
 import { LinearGradient } from 'expo-linear-gradient';
 import RadioItem from '../../composantes/RadioItem';
-import ProfileImagePicker from '../../composantes/ProfileImagePicker';
+import ProfileSelector from '../../composantes/ProfileSelector';
 import { doc, setDoc, deleteDoc } from "firebase/firestore"; // Importez la fonction addDoc
 import { db } from '../../services/fireBase'; // Assurez-vous que ce chemin est correct
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 const ModifProfil = () => {
   const [newName, setName] = useState(''); // Ajout de l'état pour le nouveau nom
@@ -21,9 +21,7 @@ const ModifProfil = () => {
   const [selectedTemperatureUnit, setSelectedTemperatureUnit] = useState('Celsius');
   const navigation = useNavigation();
 
-  const handleImagePicked = (uri) => {
-      setProfileImage(uri);
-  };
+  const handleProfileSelect = (selectedImage) => { setProfileImage(selectedImage)};
 
   const handleSelectTemperatureUnit = (value) => {
             setSelectedTemperatureUnit(value);
@@ -91,17 +89,18 @@ const ModifProfil = () => {
             <Text style={profilStyles.subheading}>Email Actuel: {auth.currentUser.email}</Text>
 
             <View style={profilStyles.inputContainer}>
-                
-                <Text style={profilStyles.text}>Name</Text>
+                {/* Nom */}
                 <TextInput
                     placeholder='Name'
+                    placeholderTextColor='#888888'
                     value={newName}
                     onChangeText={text => setName(text)}
                     style={profilStyles.input}
                 />
-                <Text style={profilStyles.text}>mot de passe</Text>
+                {/* password */}
                 <TextInput
                     placeholder='Password'
+                    placeholderTextColor='#888888'
                     value={newPassword}
                     onChangeText={text => setPassword(text)}
                     style={profilStyles.input}
@@ -109,27 +108,19 @@ const ModifProfil = () => {
                 />
 
                 {/* confirm password */}
-                <Text style={profilStyles.text}>Confirm Password</Text>
                 <TextInput
                     placeholder='Confirm Password'
+                    placeholderTextColor='#888888'
                     value={confirmPassword}
                     onChangeText={text => setConfirmPassword(text)}
                     style={profilStyles.input}
                     secureTextEntry/>
-
-                {/* city */}
-                <Text style={profilStyles.text}>City</Text>
-                <TextInput
-                    placeholder='City'
-                    value={newCity}
-                    onChangeText={text => setCity(text)}
-                    style={profilStyles.input}/>
-
-                {/* download profil picture */}
-              <View style={profilStyles.imageContainer}>
-                <Text style={profilStyles.text}>Profile Picture</Text>
-                <ProfileImagePicker currentImage={profileImage} onImagePicked={setProfileImage} />
               </View>
+                {/* update profil picture */}
+                <View style={profilStyles.imageContainer}>
+                    <Text style={profilStyles.text}>Profile Picture</Text>
+                    <ProfileSelector onSelect={handleProfileSelect} />
+                </View>
 
                 {/* choix unite de temperature */}
               <View style={profilStyles.radioContainer}>
@@ -137,7 +128,7 @@ const ModifProfil = () => {
                 <RadioItem selectedTemperatureUnit={selectedTemperatureUnit} 
                            onSelectTemperatureUnit={handleSelectTemperatureUnit} />
               </View>
-            </View>
+            
                 
             {/* boutons */}
             <LinearGradient

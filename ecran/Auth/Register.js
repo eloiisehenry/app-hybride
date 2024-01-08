@@ -11,6 +11,7 @@ import ProfileImagePicker from '../../composantes/ProfileImagePicker';
 import { doc, setDoc } from "firebase/firestore"; // Importez la fonction addDoc
 import { db } from '../../services/fireBase'; // Assurez-vous que ce chemin est correct
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import ProfileSelector from '../../composantes/ProfileSelector';
 
 const Register = () => {
     const [name, setName] = useState('');
@@ -20,7 +21,7 @@ const Register = () => {
     const [city, setCity] = useState('');
     const [profileImage, setProfileImage] = useState(null); // État pour stocker l'image de profil
 
-    const handleImagePicked = (uri) => { setProfileImage(uri) };
+    const handleProfileSelect = (selectedImage) => { setProfileImage(selectedImage)};
 
 
     const [selectedTemperatureUnit, setSelectedTemperatureUnit] = useState('Celsius'); // État pour l'unité de température sélectionnée
@@ -91,26 +92,27 @@ const Register = () => {
             <Text style={styles.heading}>Welcome !</Text>
             
             </View>
-            <Text style={styles.subheading}>Please register to continue</Text>
+            <Text style={styles.subheading}>Veuillez vous inscrire</Text>
             <View style={styles.inputContainer}>
-                
-                <Text style={styles.text}>Name</Text>
                 <TextInput
                     placeholder='Name'
+                    placeholderTextColor='#888888'
                     value={name}
                     onChangeText={text => setName(text)}
                     style={styles.input}
                 />
-                <Text style={styles.text}>email</Text>
+
                 <TextInput
                     placeholder='Email'
+                    placeholderTextColor='#888888'
                     value={email}
                     onChangeText={text => setEmail(text)}
                     style={styles.input}
                 />
-                <Text style={styles.text}>mot de passe</Text>
+
                 <TextInput
                     placeholder='Password'
+                    placeholderTextColor='#888888'
                     value={password}
                     onChangeText={text => setPassword(text)}
                     style={styles.input}
@@ -118,27 +120,20 @@ const Register = () => {
                 />
 
                 {/* confirm password */}
-                <Text style={styles.text}>Confirm Password</Text>
+
                 <TextInput
                     placeholder='Confirm Password'
+                    placeholderTextColor='#888888'
                     value={confirmPassword}
                     onChangeText={text => setConfirmPassword(text)}
                     style={styles.input}
                     secureTextEntry/>
-
-                {/* city */}
-                <Text style={styles.text}>City</Text>
-                <TextInput
-                    placeholder='City'
-                    value={city}
-                    onChangeText={text => setCity(text)}
-                    style={styles.input}/>
-
-                {/* download profil picture */}
-              <View style={styles.imageContainer}>
-                <Text style={styles.text}>Profile Picture</Text>
-                <ProfileImagePicker currentImage={profileImage} onImagePicked={setProfileImage} />
-              </View>
+                </View>
+                {/* select profil picture */}
+                <View style={styles.imageContainer}>
+                    <Text style={styles.text}>Profile Picture</Text>
+                    <ProfileSelector onSelect={handleProfileSelect} />
+                </View>
 
                 {/* choix unite de temperature */}
               <View style={styles.radioContainer}>
@@ -146,29 +141,27 @@ const Register = () => {
                 <RadioItem selectedTemperatureUnit={selectedTemperatureUnit} 
                            onSelectTemperatureUnit={handleSelectTemperatureUnit} />
               </View>
-            </View>
+            
                 
             {/* boutons */}
+        <View style={styles.buttonContainer}>
             <LinearGradient
                colors={['#EF62E5', '#2B63F3']}
-                style={styles.buttonContainer}
+                style={styles.button}
                  start={{ x: 0, y: 0.5 }}
                 end={{ x: 1, y: 0.5 }}>
-                <TouchableOpacity
-                onPress={handleRegister}
-                style={styles.button}
-                >
-              
-                <Text style={styles.buttonText}>S'inscrire</Text>
+                <TouchableOpacity onPress={handleRegister} >
+                    <Text style={styles.buttonText}>S'inscrire</Text>
                 </TouchableOpacity>
 
             </LinearGradient>
             <TouchableOpacity
-                onPress={() => navigation.navigate('Login')} // Navigue vers RegisterScreen quand on appuie sur Register
+                onPress={() => navigation.navigate('Login')} 
                 style={[styles.button, styles.buttonOutline]}
                     >
               <Text style={styles.buttonOutlineText}>Connexion</Text>
             </TouchableOpacity>
+        </View>
             {/* invite */}
             <View style={styles.inviteContainer}>
                 <TouchableOpacity

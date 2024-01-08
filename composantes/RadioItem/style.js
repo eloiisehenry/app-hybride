@@ -2,8 +2,11 @@ import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
     radioContainer: {
-        width: '80%',
+        flexDirection: 'row', // Changez ici
+        justifyContent: 'space-around', // Assurez une répartition égale
+        alignItems: 'center',
         marginTop: 20,
+        width: '80%',
     },
     option: {
         width: 20,

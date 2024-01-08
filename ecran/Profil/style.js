@@ -9,6 +9,22 @@ const profilStyles = StyleSheet.create({
     paddingTop: 130, 
     backgroundColor: 'rgba(31, 31, 31, 1)',
   },
+
+ 
+  // croix fermer la page fav
+  closeButtonCont: {
+    position: 'absolute', // Position absolue
+    top: 10, // Ajustez selon vos besoins
+    left: 0, // Ajustez selon vos besoins
+    padding: 40, // Ajoute un peu d'espace autour de l'icône pour un meilleur toucher
+  },
+  
+  closeButton: {
+    color: 'white',
+    fontSize: 20, // Taille de l'icône
+  },
+
+  // head 
   profileImageContainer: {
     borderRadius: 75, // la moitié de la largeur/hauteur pour un cercle parfait
     width: 150, // la largeur de la vue de fond, plus grande que la photo de profil
@@ -25,15 +41,33 @@ const profilStyles = StyleSheet.create({
   profileName: {
     fontSize: 30,
     fontWeight: 'bold',
-    marginTop: 8,
+    marginTop: 28,
     marginBottom: 10,
     color: 'white',
   },
+
+    // text villes fav
+    ville: {
+      color: 'white',
+      fontSize: 18,
+      marginBottom: 1,
+    },
+    textVilleFav: {
+      color: 'white',
+      fontSize: 18,
+      marginBottom: 6,
+      marginTop: 28,
+      alignSelf: 'flex-start',
+      marginLeft: 20,
+    },
+
+  // bouton
   boutContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'space-around',
     width: '100%',
     marginTop: 10,
+    margin: 10,
   },
   editButton: {
     backgroundColor: '#282828',
@@ -58,76 +92,75 @@ const profilStyles = StyleSheet.create({
     marginBottom: 25,
     alignItems: 'center',
   },
-  boutContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    width: '100%',
-    marginTop: 3,
-  },
-  ville: {
-    color: 'white',
-    fontSize: 18,
-    marginBottom: 8,
-    marginTop: 8,
-  },
-  textVilleFav: {
-    color: 'white',
-    fontSize: 18,
-    marginBottom: 6,
-    marginTop: 28,
-    alignSelf: 'flex-start',
-    marginLeft: 20,
-  },
-  voirPlus: {
+
+
+  // voir plus
+  voirPlusButton: {
     backgroundColor: '#282828',
     padding: 15,
-    width: '100%',
-    height: 200,
-    borderRadius: 30,
-    marginBottom: 60,
-    marginLeft: 20,
+    width: 90,
+    height: 180,
+    borderRadius: 20,
+    marginBottom: 45,
+    marginLeft: 10,
     alignItems: 'center',
-    color: 'white',
-  },
-  closeButtonCont: {
-    position: 'absolute', // Position absolue
-    top: 10, // Ajustez selon vos besoins
-    left: 0, // Ajustez selon vos besoins
-    padding: 40, // Ajoute un peu d'espace autour de l'icône pour un meilleur toucher
+    justifyContent: 'center',
   },
   
-  closeButton: {
+  voirPlusText: {
     color: 'white',
-    fontSize: 20, // Taille de l'icône
+    fontWeight: '500',
+    fontSize: 20,
+    alignContent: 'center',
   },
+
+  
   // style modifProfil.js
+
+  // head
+
+headContainer: {
+  width: '80%',
+  marginBottom: 5,
+  flexDirection: 'row',
+  justifyContent: 'space-between',
+  alignItems: 'center'
+},
+heading: {
+  color : 'white',
+  fontSize: 20,
+  fontWeight: '700',
+  marginBottom: 5
+},
+subheading: {
+  color : 'white',
+  fontSize: 18,
+  fontWeight: '600',
+  marginBottom: 5,
+  marginTop: 35
+},
   image2: {
     width: 100,
     height: 100,
     borderRadius: 70,
   },
-  subheading: {
-    color: 'white',
-    fontSize: 18,
-    marginBottom: 5,
-    marginTop: 5,
-    alignSelf: 'flex-start',
-  },
+
+// input
 inputContainer: {
-    width: '80%',
+    width: '75%',
     marginBottom: 20,
-
-
 },
 input: {
     backgroundColor: '#282828',
     paddingHorizontal: 15,
     paddingVertical: 10,
     borderRadius: 10,
-    marginTop: 10,
+    marginTop: 16,
     color: 'white',
 
 },
+
+// bouton
 buttonContainer: {
     width: '60%',
     justifyContent: 'center',
@@ -147,38 +180,21 @@ buttonText: {
     fontWeight: '700',
     fontSize: 16
 },
-buttonOutline: {
-    backgroundColor: 'white',
-    borderColor: 'white',
-    borderWidth: 1,
-    marginTop: 10,
-    color: 'purple'
+
+// pfp
+image2: {
+  width: 120,
+  height: 120,
+  marginBottom: 5,
+  marginTop: 5,
+  alignSelf: 'flex-start'
 },
 imageContainer: {
-    width: '80%',
-    marginTop: 40,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center'
-},
-headContainer: {
-    width: '80%',
-    marginBottom: 5,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center'
-},
-heading: {
-    color : 'white',
-    fontSize: 20,
-    fontWeight: '700',
-    marginBottom: 5
-},
-subheading: {
-    color : 'white',
-    fontSize: 18,
-    fontWeight: '400',
-    marginBottom: 5
+  width: '100%',
+  marginTop: 30,
+  flexDirection: "column",
+  justifyContent: 'space-between',
+  alignItems: 'center'
 },
 text: {
     color : 'white',
@@ -187,25 +203,23 @@ text: {
     marginBottom: 5,
     marginTop: 5
 
-},buttonOutlineText: {
-    color: 'black',
-    fontWeight: '700',
-    fontSize: 16
 },
+// radio
 radioContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 5,
-    marginTop: 5,
-    
+  width: '100%',
+  marginTop: 20,
+  marginBottom: 20,
+  flexDirection: "column",
+  justifyContent: 'space-between',
+  alignItems: 'center'
+  
 },
 radioText: {
-    color : 'white',
-    fontSize: 16,
-    fontWeight: '400',
-    marginBottom: 5,
-    marginTop: 5
+  color : 'white',
+  fontSize: 16,
+  fontWeight: '400',
+  marginBottom: 5,
+  marginTop: 5
 },
 });
 

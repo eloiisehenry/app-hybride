@@ -29,43 +29,45 @@ const Login = () => {
                 resizeMode="contain"
             />
             <Text style={styles.heading}>Welcome !</Text>
-            <Text style={styles.subheading}>Please login to continue</Text>
+            <Text style={styles.subheading}>Veuillez vous connecter</Text>
             <View style={styles.inputContainer}>
-                <Text style={styles.text}>email</Text>
+
                 <TextInput
                     placeholder='Email'
+                    placeholderTextColor='#888888'
                     value={email}
                     onChangeText={text => setEmail(text)}
                     style={styles.input}
                 />
-                <Text style={styles.text}>mot de passe</Text>
                 <TextInput
                     placeholder='Password'
+                    placeholderTextColor='#888888'
                     value={password}
                     onChangeText={text => setPassword(text)}
                     style={styles.input}
                     secureTextEntry
                 />
-            </View>
+            </View>   
+
+            {/* boutons */}
+        <View style={styles.buttonContainer}>
             <LinearGradient
                colors={['#EF62E5', '#2B63F3']}
-                style={styles.buttonContainer}
+                style={styles.button}
                  start={{ x: 0, y: 0.5 }}
                 end={{ x: 1, y: 0.5 }}>
-
-                <TouchableOpacity
-                onPress={handleLogin}
-                style={styles.button}>
-                <Text style={styles.buttonText}>Se connecter</Text>
+                <TouchableOpacity onPress={handleLogin} >
+                    <Text style={styles.buttonText}>Se connecter</Text>
                 </TouchableOpacity>
-            </LinearGradient>
 
+            </LinearGradient>
             <TouchableOpacity
-                onPress={() => navigation.navigate('Register')} // Navigue vers RegisterScreen quand on appuie sur Register
+                onPress={() => navigation.navigate('Register')}
                 style={[styles.button, styles.buttonOutline]}
                     >
               <Text style={styles.buttonOutlineText}>Inscription</Text>
             </TouchableOpacity>
+        </View>
             {/* invite */}
             <View style={styles.inviteContainer}>
                 <TouchableOpacity

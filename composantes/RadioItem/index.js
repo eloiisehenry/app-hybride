@@ -19,7 +19,7 @@ const RadioItem = ({ selectedTemperatureUnit, onSelectTemperatureUnit }) => {
             {options.map((option) => (
                 <TouchableOpacity
                     key={option.value}
-                    style={{ flexDirection: 'row', alignItems: 'center', marginVertical: 10 }}
+                    style={{ flexDirection: 'row', alignItems: 'center', marginHorizontal: 10 }}
                     onPress={() => onSelectTemperatureUnit(option.value)}
                 >
                     <View style={styles.option} >

@@ -9,13 +9,33 @@ import profilStyles from './style'; // Importez votre style
 import { useState, useEffect } from 'react';
 import { getFirestore, doc, getDoc } from 'firebase/firestore';
 import { useNavigation } from '@react-navigation/native';
-import { auth } from '../../services/fireBase';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { API_KEY, WEATHER_BASE_URL, LANG, UNITS } from '../../outils/apiConfig';
 
 const ProfilePage = () => {
   const [userData, setUserData] = useState(null);
   const navigation = useNavigation();
+  const [cityData, setCityData] = useState([]);
+  const cities = ['Paris', 'Drancy', 'Lille'];
   const auth = getAuth();
   const db = getFirestore();
+
+  const fetchWeatherDataForCity = async (city) => {
+    try {
+      const response = await fetch(`${WEATHER_BASE_URL}?q=${city}&appid=${API_KEY}&units=${UNITS}&lang=${LANG}`);
+      const result = await response.json();
+      const currentHour = new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit', hour12: false });
+      return {
+        name: city, 
+        temperature: Math.round(result.main.temp), 
+        condition: result.weather[0].description,
+        hour: currentHour
+      };
+    } catch (error) {
+      console.error("Erreur lors de la récupération des données météo", error);
+      return null;
+    }
+  };
 
  useEffect(() => {
     const fetchUserData = async () => {
@@ -36,6 +56,24 @@ const ProfilePage = () => {
            console.log('No such document!');
          }
        }
+       try {
+        const data = await Promise.all(
+          cities.map(async city => {
+            const response = await fetch(`${WEATHER_BASE_URL}?q=${city}&appid=${API_KEY}&units=${UNITS}&lang=${LANG}`);
+            const result = await response.json();
+            const currentHour = new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit', hour12: false });
+            return {
+              name: city, 
+              temperature: Math.round(result.main.temp), 
+              condition: result.weather[0].description,
+              hour: currentHour
+            };
+          })
+        );
+        setCityData(data);
+      } catch (error) {
+        console.error("Erreur lors de la récupération des données météo", error);
+      }
      };
  
      fetchUserData();
@@ -78,22 +116,21 @@ const ProfilePage = () => {
       <Text style={profilStyles.textVilleFav}>Villes favorites :</Text>
       {/* liste des villes favorites */}
       <FlatList
-        data={FakeCityConditions}
-        keyExtractor={(item) => item.id.toString()}
-        horizontal={true}
-        showsHorizontalScrollIndicator={false}
-        renderItem={({ item }) => (
-          item.id === 1 || item.id === 6 || item.id === 3 ? (
-            <FavVillesItem item={item} />
-          ) : null
-        )}
-        ListFooterComponentStyle={{ alignItems: 'center', justifyContent: 'center' }}
-        ListFooterComponent={
-          <TouchableOpacity onPress={() => navigation.navigate('FavCity')}>
-            <Text style={profilStyles.voirPlus}>Voir plus . . .</Text>
-          </TouchableOpacity>
-        }
-      />
+    data={cityData}
+    keyExtractor={(item) => item.name}
+    horizontal={true}
+    showsHorizontalScrollIndicator={false}
+    renderItem={({ item }) => (
+      <FavVillesItem item={item} />
+    )}
+    ListFooterComponentStyle={{ alignItems: 'center', justifyContent: 'center' }}
+    ListFooterComponent={
+      <TouchableOpacity onPress={() => navigation.navigate('FavCity')} style={profilStyles.voirPlusButton}>
+        <MaterialCommunityIcons name="segment" style={{color: 'white'}} size={40} />
+      </TouchableOpacity>
+    }
+/>
+
  {/* boutons modifier profil et deconnexion */}
     <View style={profilStyles.boutContainer}>
       <TouchableOpacity onPress={handleEditProfile} style={profilStyles.editButton}>
