@@ -7,7 +7,8 @@ import BottomTabs from "../ecran/tabs";
 import Home from "../ecran/Home";
 import Login from "../ecran/Auth/Login";
 import Register from "../ecran/Auth/Register";
-import Guest from "../ecran/Auth/Guest";
+import ModifProfil from "../ecran/Profil/modifProfil";
+import FavCity from "../ecran/Profil/FavCity";
 
 
 
@@ -24,7 +25,8 @@ const Routes = () => {
         <Stack.Screen name="Home" component={BottomTabs} />
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Register" component={Register} />
-        {/* <Stack.Screen name="Guest" component={Guest} /> */}
+        <Stack.Screen name="ModifProfil" component={ModifProfil} />
+        <Stack.Screen name="FavCity" component={FavCity} />
       </Stack.Navigator>
     </NavigationContainer>
   );

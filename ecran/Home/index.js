@@ -6,35 +6,42 @@ import homeStyles from './style';
 import { FakeActivity } from '../../fakeData/fakeActivity';
 import ActivityItem from '../../composantes/ActivityItem';
 
-// Assurez-vous que la clé API est correctement importée
-import { API_KEY, WEATHER_BASE_URL, ONECALL_BASE_URL, TIMEMACHINE_BASE_URL, LANG, UNITS } from '../../outils/apiConfig';
-
-
-
+import { API_KEY, WEATHER_BASE_URL, LANG, UNITS } from '../../outils/apiConfig';
 
 const Home = () => {
   const [city, setCity] = useState('');
   const [weatherInfo, setWeatherInfo] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [forecastData, setForecastData] = useState([]);
 
+  const generateFakeForecasts = (currentWeather) => {
+    if (!currentWeather || !currentWeather.main) {
+      return [];
+    }
+    
+    const morningForecast = { ...currentWeather, temp: currentWeather.main.temp_min, partOfDay: 'Matin' };
+    const noonForecast = { ...currentWeather, temp: (currentWeather.main.temp_min + currentWeather.main.temp_max) / 2, partOfDay: 'Midi' };
+    const afternoonForecast = { ...currentWeather, temp: currentWeather.main.temp_max, partOfDay: 'Après-midi' };
+    const eveningForecast = { ...currentWeather, temp: (currentWeather.main.temp_min + currentWeather.main.temp_max) / 2, partOfDay: 'Soirée' };
+  
+    return [morningForecast, noonForecast, afternoonForecast, eveningForecast];
+  };
 
   useEffect(() => {
     const fetchWeatherInfo = async () => {
-      try {
-        if (city) {
-          // Requête pour obtenir les informations météorologiques d'aujourd'hui
+      if (city) {
+        setIsLoading(true);
+        try {
           const todayUrl = `${WEATHER_BASE_URL}?q=${city}&appid=${API_KEY}&lang=${LANG}&units=${UNITS}`;
           const todayResponse = await fetch(todayUrl);
           const todayData = await todayResponse.json();
-          console.log('Réponse aujourd\'hui :', todayData);
 
           setWeatherInfo(todayData);
-          setIsLoading(true); // Début du chargement
+          setForecastData(generateFakeForecasts(todayData));
+        } catch (error) {
+          console.error('Erreur lors de la récupération des données météo', error);
         }
-        setIsLoading(false); // Fin du chargement
-      } catch (error) {
-        console.error('Erreur lors de la récupération des données météo', error);
-        setIsLoading(false); // Fin du chargement en cas d'erreur
+        setIsLoading(false);
       }
     };
 
@@ -50,6 +57,10 @@ const Home = () => {
     });
   };
 
+  const renderItem = ({ item }) => (
+    <ActivityItem item={item} />
+  );
+  
   return (
     <View style={homeStyles.container}>
       <View style={{ alignSelf: 'stretch', alignItems: 'center' }}>
@@ -69,58 +80,66 @@ const Home = () => {
         weatherInfo ? (
           <View>
             <View style={homeStyles.tempContainer}>
-              <LinearGradient colors={['#EF62E5', '#2B63F3']} style={homeStyles.tempText}>
-                <View style={homeStyles.tempTextContainer}>
-                  <Text style={homeStyles.tempText}>Hier:  -- °C </Text>
-                </View>
-              </LinearGradient>
               {weatherInfo.main && (
-                <LinearGradient colors={['#EF62E5', '#2B63F3']} style={homeStyles.tempText}>
-                  <View style={homeStyles.tempTextContainer}>
-                  <Text style={homeStyles.tempText}>Auj: {Math.round(weatherInfo.main.temp)} °C</Text>
-                  </View>
-                </LinearGradient>
+                <><View style={homeStyles.tempday2}>
+                    <Text style={homeStyles.tempText}>
+                      <MaterialCommunityIcons name="thermometer-chevron-down" style={{ color: 'white' }} size={18} />{`  ${Math.round(weatherInfo.main.temp_min)} ° c`}
+                    </Text>
+                  </View><LinearGradient colors={['#EF62E5', '#2B63F3']} style={homeStyles.tempday}>
+                      <Text style={homeStyles.tempText}>
+                        <MaterialCommunityIcons name="thermometer" style={{ color: 'white' }} size={18} />{`  ${Math.round(weatherInfo.main.temp)} ° c`}
+                      </Text>
+                    </LinearGradient><View colors={['#EF62E5', '#2B63F3']} style={homeStyles.tempday2}>
+                      <Text style={homeStyles.tempText}>
+                        <MaterialCommunityIcons name="thermometer-chevron-up" style={{ color: 'white' }} size={18} />{`  ${Math.round(weatherInfo.main.temp_max)} ° c`}
+                      </Text>
+                    </View></>
               )}
-              <LinearGradient colors={['#EF62E5', '#2B63F3']} style={homeStyles.tempText}>
-                <View style={homeStyles.tempTextContainer}>
-                  <Text style={homeStyles.tempText}>Dem: -- °C</Text>
-                </View>
-              </LinearGradient>
             </View>
             
             <View style={homeStyles.tempNumContainer}>
             <MaterialCommunityIcons name="weather-fog" style={{color: 'white'}} size={90} />
-              {weatherInfo.main && <Text style={homeStyles.headTemp}>{Math.round(weatherInfo.main.temp)} °C</Text>}
+              {weatherInfo.main && <Text style={homeStyles.headTemp}>{Math.round(weatherInfo.main.temp)} °</Text>}
             </View>
+            {/* description de la condition meteo */}
+            {weatherInfo.weather && (
+              <Text style={homeStyles.description}>{weatherInfo.weather[0].description}</Text>
+            )}
+            {/* liste des activités */}
   
             <FlatList
-              data={FakeActivity}
-              keyExtractor={(item) => item.id.toString()}
-              horizontal={true}
-              showsHorizontalScrollIndicator={false}
-              renderItem={({ item }) => (
-                <ActivityItem item={item} />
-              )}
-            />
-  
+        data={forecastData}
+        keyExtractor={(item, index) => index.toString()}
+        horizontal={true}
+        showsHorizontalScrollIndicator={false}
+        renderItem={renderItem}
+      />
+  {/* infos meteo */}
   {weatherInfo.main && (
   <View style={homeStyles.infoContainer}>
+
+    {/* Vitesse du vent */}
     <View style={{
       ...homeStyles.infoItem,
       backgroundColor: 'rgba(255, 217, 55, 0.38)', // Couleur pour le vent
     }}>
-      <Text style={{
-        ...homeStyles.textWind,
-        color: '#FFD937',
-        }}>{weatherInfo.wind.speed} m/s</Text>
+        <Text style={{...homeStyles.miniText,
+                    color: '#FFD937'}}>Vent</Text>
+        <Text style={{...homeStyles.text, color: '#FFD937',}}>
+          {weatherInfo.wind.speed} m/s
+        </Text>
       <MaterialCommunityIcons name="weather-windy" style={{
         ...homeStyles.icon,
         color: '#FFD937'}} size={22} />
     </View>
+
+    {/* Visibilité */}
     <View style={{
       ...homeStyles.infoItem,
       backgroundColor: 'rgba(68, 194, 209, 0.38)', // Couleur pour la visibilité
     }}>
+      <Text style={{...homeStyles.miniText,
+                  color: '#44C2D1'}}>Visibilité</Text>
       <Text style={{
         ...homeStyles.text,
         color: '#44C2D1',
@@ -129,10 +148,14 @@ const Home = () => {
         ...homeStyles.icon,
         color: '#44C2D1'}} size={22} />
     </View>
+
+    {/* Pression */}
     <View style={{
       ...homeStyles.infoItem,
       backgroundColor: 'rgba(255, 54, 54, 0.38)', // Couleur pour la pression
     }}>
+    <Text style={{...homeStyles.miniText,
+                  color: '#FF3636'}}>Presion</Text>
       <Text style={{
         ...homeStyles.text,
         color: '#FF3636',
@@ -141,10 +164,14 @@ const Home = () => {
         ...homeStyles.icon,
         color: '#FF3636'}} size={22} />
     </View>
+
+    {/* Humidité */}
     <View style={{
       ...homeStyles.infoItem,
       backgroundColor: 'rgba(70, 139, 255, 0.38)', // Couleur pour l'humidité
     }}>
+      <Text style={{...homeStyles.miniText,
+                    color: '#468BFF'}}>Humidité</Text>
       <Text style={{
         ...homeStyles.text,
         color: '#468BFF',
@@ -153,16 +180,19 @@ const Home = () => {
         ...homeStyles.icon,
         color: '#468BFF'}} size={22} />
     </View>
-    {/* Nouvelle information météo */}
+
+    {/* Ressenti */}
     <View style={{
       ...homeStyles.infoItem,
       backgroundColor: 'rgba(255, 126, 54, 0.38)', // Couleur pour la nouvelle info
     }}>
+      <Text style={{...homeStyles.miniText,
+                    color: '#FF7E36'}}>Ressenti</Text>
       <Text style={{
         ...homeStyles.text,
         color: '#FF7E36',
       }}>{weatherInfo.main.feels_like} °C</Text>
-      <MaterialCommunityIcons name="weather-windy-variant" style={{
+      <MaterialCommunityIcons name="thermometer" style={{
         ...homeStyles.icon,
         color: '#FF7E36'}} size={22} />
     </View>
@@ -173,10 +203,10 @@ const Home = () => {
 
             {weatherInfo.sys && (
               <View style={homeStyles.sun}>
-                <Text style={homeStyles.text}>{`Lever : ${new Date(weatherInfo.sys.sunrise * 1000).toLocaleTimeString('fr-FR', {hour: '2-digit', minute: '2-digit', hour12: false})}`}</Text>
+                <Text style={homeStyles.textSun}>{`Lever : ${new Date(weatherInfo.sys.sunrise * 1000).toLocaleTimeString('fr-FR', {hour: '2-digit', minute: '2-digit', hour12: false})}`}</Text>
                 {/* Utilisez le composant MaterialCommunityIcons de manière appropriée */}
-               <MaterialCommunityIcons name="weather-sunny" style={homeStyles.icon} size={26} />
-                <Text style={homeStyles.text}>{`Coucher : ${new Date(weatherInfo.sys.sunset * 1000).toLocaleTimeString('fr-FR', {hour: '2-digit', minute: '2-digit', hour12: false})}`}</Text>
+               <MaterialCommunityIcons name="white-balance-sunny" style={homeStyles.icon} size={30} />
+                <Text style={homeStyles.textSun}>{`Coucher : ${new Date(weatherInfo.sys.sunset * 1000).toLocaleTimeString('fr-FR', {hour: '2-digit', minute: '2-digit', hour12: false})}`}</Text>
               </View>
               )}
           </View>

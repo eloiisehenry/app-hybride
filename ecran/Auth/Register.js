@@ -1,12 +1,16 @@
 import { KeyboardAvoidingView, Image, Text, TextInput, View, TouchableOpacity } from 'react-native';
 import { React,  useState } from 'react';
 import { useNavigation } from '@react-navigation/native';// Importez useNavigation
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../../services/fireBase'; // Assurez-vous que ce chemin est correct
 import { styles } from './style';
 import { LinearGradient } from 'expo-linear-gradient';
 import { launchImageLibrary } from 'react-native-image-picker';
 import RadioItem from '../../composantes/RadioItem';
+import ProfileImagePicker from '../../composantes/ProfileImagePicker';
+import { doc, setDoc } from "firebase/firestore"; // Importez la fonction addDoc
+import { db } from '../../services/fireBase'; // Assurez-vous que ce chemin est correct
+import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 const Register = () => {
     const [name, setName] = useState('');
@@ -16,40 +20,66 @@ const Register = () => {
     const [city, setCity] = useState('');
     const [profileImage, setProfileImage] = useState(null); // État pour stocker l'image de profil
 
-    const selectImage = () => {
-      const options = {
-        // Vos options ici (quality, mediaType, etc.)
-      };
-    
-      launchImageLibrary(options, (response) => {
-        if (response.didCancel) {
-          console.log('User cancelled image picker');
-        } else if (response.error) {
-          console.log('ImagePicker Error: ', response.error);
-        } else {
-          setProfileImage(response.uri); // Stocke l'URI de l'image
-        }
-      });
-    };
+    const handleImagePicked = (uri) => { setProfileImage(uri) };
+
 
     const [selectedTemperatureUnit, setSelectedTemperatureUnit] = useState('Celsius'); // État pour l'unité de température sélectionnée
 
-    const handleSelectTemperatureUnit = (value) => {
-        setSelectedTemperatureUnit(value);
-    };
+    const handleSelectTemperatureUnit = (value) => { setSelectedTemperatureUnit(value)};
 
     const navigation = useNavigation(); // Utilisez useNavigation pour gérer la navigation
 
-    // Ajoutez ici la fonction handleRegister si nécessaire pour la connexion
-    const handleRegister = () => {
-        signInWithEmailAndPassword(auth, email, password)
-        .then(userCredentials => {
-            const user = userCredentials.user;
-            navigation.navigate('Home')
-            console.log(('Logged in with:', user.email));
-        })
-        .catch(error => alert(error.message));
+
+    //fonction handleRegister si nécessaire pour la connexion
+    const uploadImage = async (imageUri) => {
+      const storage = getStorage();
+      const imageName = `profileImages/${email}_${new Date().getTime()}`; // Nom unique pour l'image
+      const storageRef = ref(storage, imageName);
+  
+      const response = await fetch(imageUri);
+      const blob = await response.blob();
+  
+      const snapshot = await uploadBytes(storageRef, blob);
+      const downloadURL = await getDownloadURL(snapshot.ref);
+  
+      return downloadURL;
+  };
+ 
+  const handleRegister = async () => {
+    try {
+        // Création de l'utilisateur
+        const userCredentials = await createUserWithEmailAndPassword(auth, email, password);
+        console.log('Logged in with:', userCredentials.user.email);
+        navigation.navigate('Home');
+  
+        // Télécharger l'image et obtenir l'URL
+        let profileImageUrl = '';
+        if (profileImage) {
+          profileImageUrl = await uploadImage(profileImage);
+        }
+  
+        // Create a document reference
+        const userDocRef = doc(db, "Users", email);
+  
+        // Set the document data
+        await setDoc(userDocRef, {
+            name: name,
+            celsius: selectedTemperatureUnit,
+            city: city,
+            mail: email,
+            photo_profil: profileImageUrl,
+        });
+  
+        // Access the document ID
+        console.log("Document written with ID: ", userDocRef.id);
+    } catch (error) {
+        // Gestion des erreurs pour les deux opérations
+        console.error("Error in user registration or data addition: ", error);
+        alert(error.message);
     }
+  };
+  
+  
     return (
         <KeyboardAvoidingView style={styles.container} behavior="padding">
             <View style={styles.headContainer}>
@@ -105,20 +135,18 @@ const Register = () => {
                     style={styles.input}/>
 
                 {/* download profil picture */}
-                <View style={styles.buttonContainer}>
-                <TouchableOpacity
-                style={styles.button}
-                onPress={selectImage}>
-                <Text style={styles.buttonText}>Download profil picture</Text>
+              <View style={styles.imageContainer}>
+                <Text style={styles.text}>Profile Picture</Text>
+                <ProfileImagePicker currentImage={profileImage} onImagePicked={setProfileImage} />
+              </View>
 
-                </TouchableOpacity>
-                </View>
-            </View> 
                 {/* choix unite de temperature */}
-                
+              <View style={styles.radioContainer}>
                 <Text style={styles.text}>Temperature unit</Text>
                 <RadioItem selectedTemperatureUnit={selectedTemperatureUnit} 
                            onSelectTemperatureUnit={handleSelectTemperatureUnit} />
+              </View>
+            </View>
                 
             {/* boutons */}
             <LinearGradient
@@ -131,15 +159,24 @@ const Register = () => {
                 style={styles.button}
                 >
               
-                <Text style={styles.buttonText}>Register</Text>
+                <Text style={styles.buttonText}>S'inscrire</Text>
                 </TouchableOpacity>
-                <TouchableOpacity
-                 onPress={() => navigation.navigate('Login')} // Navigue vers RegisterScreen quand on appuie sur Register
+
+            </LinearGradient>
+            <TouchableOpacity
+                onPress={() => navigation.navigate('Login')} // Navigue vers RegisterScreen quand on appuie sur Register
                 style={[styles.button, styles.buttonOutline]}
                     >
-                <Text style={styles.buttonOutlineText}>Register</Text>
+              <Text style={styles.buttonOutlineText}>Connexion</Text>
+            </TouchableOpacity>
+            {/* invite */}
+            <View style={styles.inviteContainer}>
+                <TouchableOpacity
+                onPress={() => navigation.navigate('Home')}>
+                <Text style={styles.inviteLink}>Je ne souhaite pas m'authentifier</Text>
                 </TouchableOpacity>
-            </LinearGradient>
+            </View>
+            
         </KeyboardAvoidingView>
     );
 };

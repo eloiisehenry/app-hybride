@@ -56,17 +56,23 @@ const Login = () => {
                 <TouchableOpacity
                 onPress={handleLogin}
                 style={styles.button}>
-                <Text style={styles.buttonText}>Login</Text>
+                <Text style={styles.buttonText}>Se connecter</Text>
                 </TouchableOpacity>
             </LinearGradient>
 
-            <LinearGradient colors={['#EF62E5', '#2B63F3']} style={styles.buttonOutline}>
-                <TouchableOpacity
+            <TouchableOpacity
                 onPress={() => navigation.navigate('Register')} // Navigue vers RegisterScreen quand on appuie sur Register
-                >
-                <Text style={styles.buttonText}>Register</Text>
+                style={[styles.button, styles.buttonOutline]}
+                    >
+              <Text style={styles.buttonOutlineText}>Inscription</Text>
+            </TouchableOpacity>
+            {/* invite */}
+            <View style={styles.inviteContainer}>
+                <TouchableOpacity
+                onPress={() => navigation.navigate('Home')}>
+                <Text style={styles.inviteLink}>Je ne souhaite pas m'authentifier</Text>
                 </TouchableOpacity>
-            </LinearGradient>
+            </View>
             
         </KeyboardAvoidingView>
     );

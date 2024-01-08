@@ -6,7 +6,7 @@ const mapStyles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 16,
-        backgroundColor: 'rgba(31, 31, 31, 1)',
+        backgroundColor: '#1F1F1F',
       },
       input: {
         width: '100%',
@@ -29,6 +29,32 @@ const mapStyles = StyleSheet.create({
         backgroundColor: 'transparent', // Set to 'transparent' or remove this line
         borderRadius: 5,
         padding: 10,
+      },
+      mapContainer: {
+        flex: 1,
+      },
+      mapCondition: {
+        flex: 9,
+      },
+      weatherContainer: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'space-evenly',
+        alignItems: 'center',
+        backgroundColor: '#282828',
+        padding: 14,
+      },
+      column: {
+        flex: 1, // Donne une largeur égale à chaque colonne
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'space-around', // Espacement uniforme entre les éléments
+      },
+      weatherInfo: {
+        color: '#e0e0e0',
+        fontSize: 14,
+        textAlign: 'center',
+        lineHeight: 20, // Ajustez si nécessaire pour un espacement uniforme
       },
 });
 

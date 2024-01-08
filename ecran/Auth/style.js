@@ -31,7 +31,7 @@ export const styles = StyleSheet.create({
     },
     button: {
         backgroundColor : 'transparent',
-        width: '100%',
+        width: '60%',
         padding: 15,
         borderRadius: 10,
         alignItems: 'center'
@@ -51,18 +51,25 @@ export const styles = StyleSheet.create({
     image: {
         width: 150,
         height: 150,
-        marginBottom: 20
+        marginBottom: 5
     },
     image2: {
         width: 90,
         height: 90,
-        marginBottom: 20,
-        marginTop: 20,
+        marginBottom: 5,
+        marginTop: 5,
         alignSelf: 'flex-start'
+    },
+    imageContainer: {
+        width: '80%',
+        marginTop: 40,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center'
     },
     headContainer: {
         width: '80%',
-        marginBottom: 20,
+        marginBottom: 5,
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center'
@@ -71,20 +78,20 @@ export const styles = StyleSheet.create({
         color : 'white',
         fontSize: 30,
         fontWeight: '700',
-        marginBottom: 20
+        marginBottom: 5
     },
     subheading: {
         color : 'white',
         fontSize: 18,
         fontWeight: '400',
-        marginBottom: 20
+        marginBottom: 5
     },
     text: {
         color : 'white',
-        fontSize: 16,
+        fontSize: 14,
         fontWeight: '400',
-        marginBottom: 20,
-        marginTop: 20
+        marginBottom: 5,
+        marginTop: 5
 
     },buttonOutlineText: {
         color: 'black',
@@ -95,16 +102,32 @@ export const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginBottom: 20,
-        marginTop: 20,
+        marginBottom: 5,
+        marginTop: 5,
         
     },
     radioText: {
         color : 'white',
         fontSize: 16,
         fontWeight: '400',
-        marginBottom: 20,
-        marginTop: 20
+        marginBottom: 5,
+        marginTop: 5
+    },
+    inviteContainer: {
+        width: '80%',
+        marginTop: 40,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    inviteLink: {
+        color : 'white',
+        fontSize: 14,
+        fontWeight: '400',
+        marginBottom: 5,
+        marginTop: 5,
+        textDecorationLine: 'underline',
+        textDecorationStyle: 'solid',
     },
     
 });

@@ -29,17 +29,40 @@ const profilStyles = StyleSheet.create({
     marginBottom: 10,
     color: 'white',
   },
+  boutContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+    marginTop: 10,
+  },
   editButton: {
     backgroundColor: '#282828',
     padding: 15,
-    width: '55%',
+    width: '40%',
+    height: 40,
     borderRadius: 15,
     marginBottom: 25,
     alignItems: 'center',
   },
   editButtonText: {
     color: 'white',
-    fontWeight: 'bold',
+    fontWeight: '600',
+    fontSize: 10,
+  },
+  logOutButton: {
+    backgroundColor: '#7F0000',
+    padding: 15,
+    width: '40%',
+    height: 40,
+    borderRadius: 15,
+    marginBottom: 25,
+    alignItems: 'center',
+  },
+  boutContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    width: '100%',
+    marginTop: 3,
   },
   ville: {
     color: 'white',
@@ -54,7 +77,29 @@ const profilStyles = StyleSheet.create({
     marginTop: 28,
     alignSelf: 'flex-start',
     marginLeft: 20,
-  }
+  },
+  voirPlus: {
+    backgroundColor: '#282828',
+    padding: 15,
+    width: '100%',
+    height: 200,
+    borderRadius: 30,
+    marginBottom: 60,
+    marginLeft: 20,
+    alignItems: 'center',
+    color: 'white',
+  },
+  closeButtonCont: {
+    position: 'absolute', // Position absolue
+    top: 10, // Ajustez selon vos besoins
+    left: 0, // Ajustez selon vos besoins
+    padding: 40, // Ajoute un peu d'espace autour de l'icône pour un meilleur toucher
+  },
+  
+  closeButton: {
+    color: 'white',
+    fontSize: 20, // Taille de l'icône
+  },
 });
 
 export default profilStyles;

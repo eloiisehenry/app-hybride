@@ -4,11 +4,11 @@ export const styles = StyleSheet.create({
   citiesContainer: {
     backgroundColor: 'transparent',
     width: 100,
-    height: 180,
+    height: 200,
     padding: 10,
     marginVertical: 28,
     marginHorizontal: 8,
-    borderRadius: 20,
+    borderRadius: 30,
     borderColor: '#282828',
     borderWidth: 10,
     },
@@ -36,5 +36,17 @@ export const styles = StyleSheet.create({
     fontWeight: '600',
     alignSelf: 'center',
     marginBottom: 18,
+  },
+  seeMoreBout: {
+    backgroundColor: '#282828',
+    padding: 15,
+    width: '100%',
+    borderRadius: 15,
+    marginBottom: 25,
+    alignItems: 'center',
+  },
+  seeMoreText: {
+    color: 'white',
+    fontWeight: 'bold',
   },
 });
