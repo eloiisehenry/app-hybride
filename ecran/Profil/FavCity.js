@@ -1,15 +1,19 @@
-import React, { useState, useEffect} from 'react';
-import { View, TextInput, FlatList, Text } from 'react-native';
-import rechercheStyles from './style';
-import VillesItem from '../../composantes/VillesItem';
+import { View, Text, TouchableOpacity, FlatList } from 'react-native'
+import React, { useState, useEffect} from 'react'
+import profilStyles from './style'
+import { useNavigation } from '@react-navigation/native';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { API_KEY, WEATHER_BASE_URL, LANG, UNITS } from '../../outils/apiConfig';
+import FavVillesItem from '../../composantes/FavVillesItem';
 
-const Recherche = () => {
-  const [cityData, setCityData] = useState([]);
-  const [searchText, setSearchText] = useState('');
-  const [searchResult, setSearchResult] = useState(null);
+const FavCity = () => {
+    const navigation = useNavigation();
+    const [cityData, setCityData] = useState([]);
+    const cities = ['Paris', 'Drancy', 'Lille'];
 
-  const cities = ["Paris", "Marseille", "Lyon", "Toulouse", "Nice", "Nantes", "Bordeaux", "Strasbourg", "Montpellier", "Lille"];
+    const handleClose = () => {
+      navigation.goBack(); // Retourne à l'écran précédent
+    };
 
   const fetchWeatherDataForCity = async (city) => {
     try {
@@ -26,11 +30,6 @@ const Recherche = () => {
       console.error("Erreur lors de la récupération des données météo", error);
       return null;
     }
-  };
-
-  const handleSearch = async () => {
-    const result = await fetchWeatherDataForCity(searchText);
-    setSearchResult(result);
   };
 
   useEffect(() => {
@@ -57,25 +56,20 @@ const Recherche = () => {
 
     fetchWeatherData();
   }, []);
-
-  return (
-    <View style={rechercheStyles.container}>
-      <TextInput
-        style={rechercheStyles.input}
-        placeholder="Rechercher une ville"
-        onChangeText={setSearchText}
-        onSubmitEditing={handleSearch} // Déclenche la recherche lorsque l'utilisateur soumet le formulaire
-      />
-      {searchResult && <VillesItem item={searchResult} />}
-      <FlatList
-        data={cityData}
-        keyExtractor={(item) => item.name}
-        horizontal={false}
-        showsHorizontalScrollIndicator={false}
-        renderItem={({ item }) => <VillesItem item={item} />}
-      />
-    </View>
-  );
-};
-
-export default Recherche;
+  
+    return (
+      <View style={profilStyles.container}>
+        <TouchableOpacity onPress={handleClose} style={profilStyles.closeButtonCont}>
+          <MaterialCommunityIcons name="close-thick" style={profilStyles.closeButton}/>
+        </TouchableOpacity>      
+        <FlatList
+          data={cityData}
+          keyExtractor={(item) => item.name}
+          horizontal={true}
+          showsHorizontalScrollIndicator={false}
+          renderItem={({ item }) => <FavVillesItem item={item} />}
+        />
+      </View>
+    );
+  };
+export default FavCity

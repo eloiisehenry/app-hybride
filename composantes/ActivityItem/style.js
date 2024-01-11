@@ -3,14 +3,16 @@ import { StyleSheet } from 'react-native';
 export const styles = StyleSheet.create({
   citiesContainer: {
     backgroundColor: 'transparent',
-    width: 150,
-    height: 150,
+    width: 110,
+    height: 130,
     padding: 10,
     marginVertical: 28,
     marginHorizontal: 8,
-    borderRadius: 40,
+    borderRadius: 30,
     borderColor: '#282828',
     borderWidth: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
     },
   cityInfoContainer: {
     flex: 1,
@@ -28,13 +30,12 @@ export const styles = StyleSheet.create({
     fontWeight: '700',
     color: 'white',// Assurez-vous que cet élément s'aligne à gauche
     alignSelf: 'center',
-    marginTop: 13,
+    marginTop: 1,
   },
   temp: {
     color: 'white',
-    fontSize: 35,
-    fontWeight: '600',
+    fontSize: 30,
+    fontWeight: '300',
     alignSelf: 'center',
-    marginBottom: 18,
   },
 });
