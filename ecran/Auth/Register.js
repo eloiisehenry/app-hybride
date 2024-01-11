@@ -5,9 +5,7 @@ import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../../services/fireBase'; // Assurez-vous que ce chemin est correct
 import { styles } from './style';
 import { LinearGradient } from 'expo-linear-gradient';
-import { launchImageLibrary } from 'react-native-image-picker';
 import RadioItem from '../../composantes/RadioItem';
-import ProfileImagePicker from '../../composantes/ProfileImagePicker';
 import { doc, setDoc } from "firebase/firestore"; // Importez la fonction addDoc
 import { db } from '../../services/fireBase'; // Assurez-vous que ce chemin est correct
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';

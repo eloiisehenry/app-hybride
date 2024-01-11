@@ -28,8 +28,8 @@ export const styles = StyleSheet.create({
     },
     // icon page inscription
     image2: {
-        width: 120,
-        height: 120,
+        width: 100,
+        height: 100,
         marginBottom: 5,
         marginTop: 5,
         alignSelf: 'flex-start'
@@ -45,7 +45,7 @@ export const styles = StyleSheet.create({
     // head
     headContainer: {
         width: '80%',
-        marginBottom: 55,
+        marginBottom: 5,
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center'
@@ -54,14 +54,14 @@ export const styles = StyleSheet.create({
         color : 'white',
         fontSize: 30,
         fontWeight: '700',
-        marginBottom: 5
+        marginBottom: -23
     },
     subheading: {
         color : 'white',
-        fontSize: 16,
+        fontSize: 12,
         fontWeight: '400',
-        marginBottom: 25,
-        marginTop: 5
+        marginBottom: 5,
+        marginTop: 35
     },
     text: {
         color : 'white',

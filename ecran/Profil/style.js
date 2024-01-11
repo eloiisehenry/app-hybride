@@ -41,7 +41,7 @@ const profilStyles = StyleSheet.create({
   profileName: {
     fontSize: 30,
     fontWeight: 'bold',
-    marginTop: 28,
+    marginTop: 18,
     marginBottom: 10,
     color: 'white',
   },
@@ -50,13 +50,13 @@ const profilStyles = StyleSheet.create({
     ville: {
       color: 'white',
       fontSize: 18,
-      marginBottom: 1,
+      
     },
     textVilleFav: {
       color: 'white',
       fontSize: 18,
-      marginBottom: 6,
-      marginTop: 28,
+      marginBottom: 26,
+      marginTop: 8,
       alignSelf: 'flex-start',
       marginLeft: 20,
     },
@@ -101,7 +101,7 @@ const profilStyles = StyleSheet.create({
     width: 90,
     height: 180,
     borderRadius: 20,
-    marginBottom: 45,
+    marginBottom: -14,
     marginLeft: 10,
     alignItems: 'center',
     justifyContent: 'center',
@@ -162,23 +162,21 @@ input: {
 
 // bouton
 buttonContainer: {
-    width: '60%',
+    width: '40%',
+    height: 40,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 20,
+    marginTop: 10,
     borderRadius: 18,
 },
 button: {
     backgroundColor : 'transparent',
-    width: '60%',
-    padding: 15,
-    borderRadius: 10,
-    alignItems: 'center'
+    padding: 10,
 },
 buttonText: {
     color: 'white',
     fontWeight: '700',
-    fontSize: 16
+    fontSize: 13
 },
 
 // pfp
